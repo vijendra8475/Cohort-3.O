@@ -7,7 +7,6 @@ const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 // helper
 const readTodo = () => {
     if(!fs.existsSync(__dirname))
