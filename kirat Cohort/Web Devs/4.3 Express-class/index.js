@@ -60,7 +60,6 @@ app.put('/', (req, res) => {
 app.delete('/', (req, res) => {
 
     users[0].kidneys = users[0].kidneys.filter(k => k.healthy === true)
-  
     res.status(200).json({
         message : 'Done',
         users
