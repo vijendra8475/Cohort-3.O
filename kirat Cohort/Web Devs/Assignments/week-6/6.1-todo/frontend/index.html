@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>100xTODO</title>
@@ -108,12 +109,7 @@
   <div class="todo-card">
     <div class="title">100xTODO</div>
 
-    <input
-      class="todo-input"
-      id="todoInput"
-      type="text"
-      placeholder="Enter a todo..."
-    />
+    <input class="todo-input" id="todoInput" type="text" placeholder="Enter a todo..." />
 
     <button class="add-btn" onclick="addTodo()">Add Todo</button>
 
@@ -162,18 +158,18 @@
     }
 
     async function updateTodo(id) {
-  const updatedTask = document.getElementById(`task-${id}`).value;
+      const updatedTask = document.getElementById(`task-${id}`).value;
 
-  if (!updatedTask.trim()) return;
+      if (!updatedTask.trim()) return;
 
-  await fetch(`${API_URL}/todos/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ updatedTask })
-  });
+      await fetch(`${API_URL}/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ updatedTask })
+      });
 
-  fetchTodos();
-}
+      fetchTodos();
+    }
 
 
     async function deleteTodo(id) {
@@ -190,4 +186,5 @@
   </script>
 
 </body>
+
 </html>
