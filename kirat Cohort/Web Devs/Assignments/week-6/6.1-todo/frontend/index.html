@@ -1,23 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>100xTODO</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #1b1f3b, #0b0f2a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    .todo-card {
+      width: 420px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: #9b5cff;
+      margin-bottom: 25px;
+    }
+
+    .todo-input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #7b3fe4, #5b2db5);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 25px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .todo-text {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .update-btn {
+      background: #7b3fe4;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background: #e6485d;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>100xTODO</h1>
 
-    <div class="input-container">
-      <input type="text" id="todo-input" placeholder="Enter a todo..." />
-      <button id="add-todo-btn">Add Todo</button>
-    </div>
+  <div class="todo-card">
+    <div class="title">100xTODO</div>
 
-    <ul id="todo-list"></ul>
+    <input
+      class="todo-input"
+      id="todoInput"
+      type="text"
+      placeholder="Enter a todo..."
+    />
+
+    <button class="add-btn" onclick="addTodo()">Add Todo</button>
+
+    <div id="todoList"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const API_URL = "http://localhost:3001";
+
+    async function fetchTodos() {
+      const res = await fetch(`${API_URL}/todos`);
+      const todos = await res.json();
+
+      const list = document.getElementById("todoList");
+      list.innerHTML = "";
+
+      todos.forEach(todo => {
+        const div = document.createElement("div");
+        div.className = "todo-item";
+        div.innerHTML = `
+          <input class="todo-text" id="task-${todo.id}" value="${todo.task}" />
+          <button class="update-btn" onclick="updateTodo(${todo.id})">
+            Update
+          </button>
+          <button class="delete-btn" onclick="deleteTodo(${todo.id})">
+            Delete
+          </button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    async function addTodo() {
+      const input = document.getElementById("todoInput");
+      const task = input.value.trim();
+      if (!task) return;
+
+      await fetch(`${API_URL}/todos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task })
+      });
+
+      input.value = "";
+      fetchTodos();
+    }
+
+    async function updateTodo(id) {
+  const updatedTask = document.getElementById(`task-${id}`).value;
+
+  if (!updatedTask.trim()) return;
+
+  await fetch(`${API_URL}/todos/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ updatedTask })
+  });
+
+  fetchTodos();
+}
+
+
+    async function deleteTodo(id) {
+      await fetch(`${API_URL}/todos/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskId: id })
+      });
+
+      fetchTodos();
+    }
+
+    fetchTodos();
+  </script>
+
 </body>
 </html>
