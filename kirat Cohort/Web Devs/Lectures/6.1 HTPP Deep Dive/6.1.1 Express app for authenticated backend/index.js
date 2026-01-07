@@ -85,6 +85,8 @@ app.post('/signin', (req, res) => {
 app.get('/me', auth, (req, res) => {
 
     const user = req.user
+    console.log(user);
+    
 
     res.status(200).json({
         message : 'Authorized',

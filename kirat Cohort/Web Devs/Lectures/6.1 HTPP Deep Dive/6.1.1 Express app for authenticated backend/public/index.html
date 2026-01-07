@@ -2,91 +2,104 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 
 <body>
-    <h2>Sign up section</h2>
-    <div>
+
+    <div class="auth">
         Signup
-        <input type="text" id="signup-username" name="username" placeholder="Username" />
-        <input type="number" id="signup-password" name="password" placeholder="Password" />
+        <input type="text" id="signup-username" name="username" placeholder="Username">
+        <input type="password" id="signup-password" name="password" placeholder="Password">
         <button onclick="signup()">Submit</button>
     </div>
-    <br><br><br><br><br>
 
-    <h2>Sign in section</h2>
-    <div>
+
+    <div class="auth">
         Signin
         <input type="text" id="signin-username" name="username" placeholder="Username">
         <input type="password" id="signin-password" name="password" placeholder="Password">
         <button onclick="signin()">Submit</button>
     </div>
-    <br><br><br><br><br>
 
-    <h2>User information section</h2>
-    <div>
+
+
+    <div class="authenticated">
         User information:
         <div id="information"></div>
     </div>
-    <br><br><br><br><br>
 
-    <h2>Logout button</h2>
-    <div>
+
+
+    <div class="authenticated">
         <button onclick="logout()">Logout</button>
     </div>
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
     <script>
-        async function signup() {
-            const username = document.getElementById("signup-username").value;
-            const password = document.getElementById("signup-password").value;
+    async function signup() {
+        const username = document.getElementById("signup-username").value;
+        const password = document.getElementById("signup-password").value;
 
-            const response = await axios.post("http://localhost:3000/signup", {
-                username,
-                password
-            })
-            alert("Signed up successfully");
-        }
+        await axios.post("http://localhost:3000/signup", {
+            username,
+            password
+        });
 
+        alert("Signed up successfully");
+    }
 
-        async function signin() {
-            const username = document.getElementById("signin-username").value;
-            const password = document.getElementById("signin-password").value;
+    async function signin() {
+        const username = document.getElementById("signin-username").value;
+        const password = document.getElementById("signin-password").value;
 
-            const response = await axios.post("http://localhost:3000/signin", {
-                username: username,
-                password: password
+        const response = await axios.post("http://localhost:3000/signin", {
+            username,
+            password
+        });
+
+        localStorage.setItem("token", response.data.token);
+
+        alert("Signed in successfully");
+        getUserInformation(); // ✅ refresh UI
+    }
+
+    function logout() {
+        localStorage.removeItem("token");
+        getUserInformation(); // ✅ refresh UI
+    }
+
+    async function getUserInformation() {
+        const token = localStorage.getItem("token");
+
+        const auth = document.querySelectorAll('.auth');
+        const info = document.querySelectorAll('.authenticated'); // ✅ FIXED
+
+        if (token) {
+            const response = await axios.get("http://localhost:3000/me", {
+                headers: {
+                    Authorization: token
+                }
             });
 
-            localStorage.setItem("token", response.data.token);
+            document.getElementById("information").innerHTML =
+                response.data.username;
 
-            alert("Signed in successfully");
+            auth.forEach(div => div.style.display = 'none');
+            info.forEach(div => div.style.display = 'block');
+
+        } else {
+            auth.forEach(div => div.style.display = 'block');
+            info.forEach(div => div.style.display = 'none');
         }
+    }
 
+    // run on page load
+    getUserInformation();
+</script>
 
-        async function logout() {
-            localStorage.removeItem("token");
-        }
-
-
-
-        async function getUserInformation() {
-            const token = localStorage.getItem("token");
-
-            if (token) {
-                const response = await axios.get("http://localhost:3000/me", {
-                    headers: {
-                        Authorization: token
-                    }
-                });
-                document.getElementById("information").innerHTML = response.data.username;
-            }
-        }
-    </script>
 </body>
 
 </html>
