@@ -81,4 +81,8 @@ document.getElementById('add-bookmark-btn').addEventListener('click', async () =
 // Delete a bookmark
 function deleteBookmark(id) {
     //  start here;
+
+
 }
+
+document.querySelector('.delete-btn').addEventListener('click', deleteBookmark)
