@@ -5,18 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookmark Manager</title>
   <link rel="stylesheet" href="styles.css">
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
 </head>
 <body>
   <div class="container">
     <h1>Bookmark Manager</h1>
 
     <div class="input-container">
-      <input type="text" id="bookmark-url" placeholder="Enter bookmark URL" />
-      <input type="text" id="bookmark-category" placeholder="Enter category" />
-      <button id="add-bookmark-btn">Add Bookmark</button>
+          <input type="text" id="bookmark-category" placeholder="Enter Title" />
+          <input type="text" id="bookmark-url" placeholder="Enter bookmark URL" />
+          <button type="submit" id="add-bookmark-btn">Add Bookmark</button>
     </div>
 
-    <ul id="bookmark-list"></ul>
+    <ul id="bookmark-list">
+      <li>
+        <div class="contents">
+          <div class="title">github</div>
+          <div class="url">www.github.com</div>
+        </div>
+
+        <div class="buttons">
+           <!-- <i class="ri-star-fill favorite-btn"></i> -->
+            <i class="ri-star-line favorite-btn"></i>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </li>
+    </ul>
   </div>
 
   <script src="script.js"></script>
