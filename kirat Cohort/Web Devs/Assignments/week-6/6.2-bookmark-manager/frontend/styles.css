@@ -114,8 +114,14 @@ body::after {
   overflow: auto;
   border-radius: 10px;
  }
+ 
+ a{
+  text-decoration: none;
+  color: white;
+  font-size: 30px;
+ }
    
- #bookmark-list li {
+ #bookmark-list li{
   /*start here  */
   padding: 10px 20px;
   border-radius: 12px;
@@ -125,17 +131,21 @@ body::after {
   /* background-color: rgb(46, 192, 249); */
   background-color: rgba(0, 0, 0, 0.572);
   color: white;
+  cursor: pointer;
  }
 
  .contents{
-  width: 60%;
+  max-width: 50%;
   height: 100%;
+  overflow: hidden;
+  gap: 10px;
   /* background-color: #fff; */
  }
 
  .title{
   font-size: 22px;
   font-weight: 700;
+
  }
 
  .url{

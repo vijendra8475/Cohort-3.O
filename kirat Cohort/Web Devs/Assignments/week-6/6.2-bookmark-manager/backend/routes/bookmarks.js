@@ -1,7 +1,7 @@
 // let bookmarks = []; // in memory space
-let currentId = 0;
+let currentId = 1;
 
-const bookmarks = [
+let bookmarks = [
   {
     id: currentId++,
     url: "https://developer.mozilla.org",
@@ -48,16 +48,26 @@ export async function addBookmark(req,res,next){
     res.status(200).json({ message : 'bookmark added successfully'})
 }
 
-export async function deleteBookmark(req,res,next){
-// write here
-    const { id } = req.params;
+export async function deleteBookmark(req, res, next) {
+    let id = req.params.id
+    console.log(id, typeof(id));
+    
 
-    if(!id)
-        return res.status(401).json({ message : 'id is required'}),
+    if (!id) {
+        return res.status(400).json({ message: 'id is required' });
+    }
 
-    bookmarks = await bookmarks.filter(b => b.id !== id);
+    id = Number(id)
 
-    res.status(200).json({ message : 'bookmark deleted successfully'})
+    const initialLength = bookmarks.length;
+
+    bookmarks = bookmarks.filter(b => b.id !== id);
+
+    if (bookmarks.length === initialLength) {
+        return res.status(404).json({ message: 'bookmark not found' });
+    }
+
+    res.status(200).json({ message: 'bookmark deleted successfully' });
 }
 
 export async function getAllBookmarks(req,res,next){
@@ -72,9 +82,9 @@ export async function favBookmmark(req, res, next) {
     const { id } = req.body;
 
     if(!id)
-        return res.status(401).json({ message : 'Id is required'})
+        return res.status(400).json({ message : 'Id is required'})
 
-    const bookmark = await bookmarks.find(b => b.id === id)
+    const bookmark = bookmarks.find(b => b.id === id)
     bookmark.fav = true
 
     res.status(200).json({ message : 'bookmark marked as favrouit' })

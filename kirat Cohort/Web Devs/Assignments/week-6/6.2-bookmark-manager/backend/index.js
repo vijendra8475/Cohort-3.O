@@ -5,7 +5,11 @@ import { addBookmark, deleteBookmark, getAllBookmarks, favBookmmark, unFavBookmm
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
+app.use(express.json());
+
 app.use(express.json());
 
 
@@ -21,9 +25,9 @@ app.delete('/bookmarks/:id', deleteBookmark);
 
 //  TODO: Can u implement searching bookmark and favorite and unfavorite bookmark route ??
 
-app.post('/fav', favBookmmark)
+app.post('/bookmarks/fav', favBookmmark)
 
-app.post('/unfav', unFavBookmmark)
+app.post('/bookmarks/unfav', unFavBookmmark)
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
