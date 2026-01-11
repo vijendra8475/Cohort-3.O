@@ -48,7 +48,6 @@ app.post("/signin", async function(req, res) {
         return res.status(403).json({ message : 'invalid password'})
 
     const token = jwt.sign({ id : user._id.toString() }, JWT_SECRET);
-    // req.headers.authorization = token;
     return res.status(200).json({ message : 'signin successfully', token})
 });
 
