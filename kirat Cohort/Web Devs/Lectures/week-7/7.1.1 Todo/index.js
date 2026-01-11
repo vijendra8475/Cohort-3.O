@@ -78,4 +78,6 @@ app.get("/todos", auth, async function(req, res) {
     return res.status(200).json({ message : "here is task...", tasks})
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+    console.log('Server is runnig on port 3000');
+});
