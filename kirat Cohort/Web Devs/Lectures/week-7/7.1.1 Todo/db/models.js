@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-const User = new Schema({
+const UserSchema = new Schema({
   name: String,
   email: String,
   password: String
@@ -15,7 +15,7 @@ const TodoSchema = new Schema({
   done: Boolean
 });
 
-const UserModel = mongoose.model('users', User);
+const UserModel = mongoose.model('users', UserSchema);
 const TodoModel = mongoose.model('todos', TodoSchema);
 
 module.exports = {
