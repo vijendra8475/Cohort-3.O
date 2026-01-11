@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001/bookmarks';
+const API_URL = 'https://bookmark-backend-toe2.onrender.com/bookmarks';
 
 // Fetch bookmarks when the page loads
 document.addEventListener('DOMContentLoaded', () => {
@@ -104,6 +104,31 @@ async function deleteBookmark(id) {
 async function makeFav(id) {
     try{
         const data = await fetch(`${API_URL}/fav`,{
+            method : 'post',
+            body : JSON.stringify({ id }),
+            headers: {
+            "Content-Type": "application/json"
+            },
+        })
+
+        const res = data.json() ;
+
+        if(!data.ok)
+            throw new Error(res.message)
+
+        // alert('fav completed')
+        fetchBookmarks();
+    }
+    catch(err) {
+        // alert(err)
+    }
+}
+
+
+
+async function makeUnfav(id) {
+    try{
+        const data = await fetch(`${API_URL}/unfav`,{
             method : 'post',
             body : JSON.stringify({ id }),
             headers: {
