@@ -2,7 +2,11 @@ const express = require('express')
 const app =  express();
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
+const  { userModel, adminModel, purchaseModel, courseModel } = require('./DB/models')
+const connect = require('./DB/db')
+
 dotenv.config();
+connect();
 
 const PORT = process.env.PORT
 
