@@ -19,8 +19,14 @@ router.post('/course', (req, res) => {
     })
 })
 
+router.put('/course', (req, res) => {
+    res.json({
+        message : 'course craetion'
+    })
+})
 
-router.post('/course/bulk', (req, res) => {
+
+router.get('/course/bulk', (req, res) => {
     res.json({
         message : 'course / bulk'
     })
