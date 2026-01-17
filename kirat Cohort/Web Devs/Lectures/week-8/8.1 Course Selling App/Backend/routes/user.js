@@ -2,6 +2,10 @@ const { Router } = require('express')
 const { userModel } = require('../DB/models')
 const bcrypt = require('bcrypt')
 const router = Router();
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 router.post('/signup', async (req, res) => {
 
@@ -27,9 +31,26 @@ router.post('/signup', async (req, res) => {
     }
 })
 
-router.post('/signin', (req, res) => {
+router.post('/signin', async (req, res) => {
+
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({ email })
+
+    if(!user)
+        return res.status(403).json({ message : 'Invalid credentials'})
+
+    const isPasswordCorrect = bcrypt.compare(password, user.password);
+
+    if(!isPasswordCorrect)
+        return res.status(403).json({ message : 'Invalid Credentials'})
+
+    const token = jwt.sign({ id : user._id }, process.env.JWT_SECRET);
+
+
     res.json({
-        message : 'signin route'
+        message : 'signin route',
+        token
     })
 })
 

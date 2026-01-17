@@ -5,6 +5,8 @@ const dotenv = require('dotenv')
 const  { userModel, adminModel, purchaseModel, courseModel } = require('./DB/models')
 const connect = require('./DB/db')
 
+app.use(express.json())
+
 dotenv.config();
 connect();
 
