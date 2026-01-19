@@ -1,9 +1,10 @@
 const { Router } = require('express');
-const { adminModel } = require('../DB/models');
+const { adminModel, courseModel } = require('../DB/models');
 const bcrypt = require('bcrypt')
 const router = Router();
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const { adminMiddleware } = require('../middlewares/admin.middlewares');
 
 dotenv.config();
 
@@ -32,13 +33,14 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password);
 
     const user = await adminModel.findOne({ email })
 
     if(!user)
         return res.status(403).json({ message : 'Invalid credentials'})
 
-    const isPasswordCorrect = bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if(!isPasswordCorrect)
         return res.status(403).json({ message : 'Invalid Credentials'})
@@ -52,22 +54,63 @@ router.post('/signin', async (req, res) => {
     })
 })
 
-router.post('/course', (req, res) => {
+router.post('/course', adminMiddleware, async (req, res) => {
+
+    const { title, description, imageUrl, price } = req.body
+
+    await courseModel.create({
+        title,
+        description,
+        imageUrl,
+        price,
+        creatorId : req.adminId
+    })
+    
     res.json({
         message : 'course craetion'
     })
 })
 
-router.put('/course', (req, res) => {
-    res.json({
-        message : 'course craetion'
-    })
+router.put('/course', adminMiddleware, async (req, res) => {
+    const adminId = req.adminId
+
+    const { title, description, imageUrl, price, courseId } = req.body;
+
+    try{
+        await courseModel.updateOne({
+            _id : courseId,
+            creatorId : adminId
+        }, {
+            title,
+            description,
+            imageUrl,
+            price
+        })
+
+        res.status(200).json({
+            message : 'Course updated'
+        })
+    }
+    catch {
+        res.json({
+            message : 'something went wrong while updating course'
+        })
+    }
+
+    
 })
 
 
-router.get('/course/bulk', (req, res) => {
+router.get('/course/bulk', adminMiddleware, async(req, res) => {
+
+    const { adminId } = req;
+
+    const courses = await courseModel.find({
+        creatorId : adminId
+    })
     res.json({
-        message : 'course / bulk'
+        message : 'Admin all courses',
+        courses
     })
 })
 
