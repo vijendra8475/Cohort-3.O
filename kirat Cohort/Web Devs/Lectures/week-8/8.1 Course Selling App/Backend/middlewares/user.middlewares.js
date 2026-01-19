@@ -7,13 +7,15 @@ const userMiddleware = async (req, res, next) => {
     const token = req.headers.authorization
     const decode = jwt.verify( token, process.env.JWT_SECRET);
 
-    if(decode) {
+    if(decode) {        
         req.userId = decode.id
         next();
     }
-    res.status(403).json({
-        message : 'you are not signed in '
-    })
+    else {
+        res.status(403).json({
+            message : 'you are not signed in '
+        })
+    }
 }
 
 module.exports = { userMiddleware }
