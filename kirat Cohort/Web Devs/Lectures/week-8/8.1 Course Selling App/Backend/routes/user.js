@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { userModel, purchaseModel } = require('../DB/models')
+const { userModel, purchaseModel, courseModel } = require('../DB/models')
 const bcrypt = require('bcrypt')
 const router = Router();
 const jwt = require('jsonwebtoken');
@@ -65,10 +65,16 @@ router.get('/purchases', userMiddleware, async (req, res) => {
             userId
         })
 
+        const coursesList = courses.map(c => c.courseId)
+
+        const coursesData = await courseModel.find({
+            _id : { $in : coursesList}
+        })
+
         if(courses.length === 0)
             return res.status(201).json({ message : "You not purchase any course" });
 
-        res.status(200).json({ message : "request success", courses });
+        res.status(200).json({ message : "request success", coursesData });
     }
     catch {
         res.status(400).json({ message : "something went wrong" })
