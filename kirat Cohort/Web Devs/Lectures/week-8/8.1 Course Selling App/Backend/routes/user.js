@@ -68,7 +68,7 @@ router.get('/purchases', userMiddleware, async (req, res) => {
         if(courses.length === 0)
             return res.status(201).json({ message : "You not purchase any course" });
 
-        res.json(200).json({ message : "request success", courses });
+        res.status(200).json({ message : "request success", courses });
     }
     catch {
         res.status(400).json({ message : "something went wrong" })
