@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const router = Router();
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const { userMiddleware } = require('../middlewares/user.middlewares');
 
 dotenv.config();
 
@@ -55,7 +56,7 @@ router.post('/signin', async (req, res) => {
     })
 })
 
-router.get('/purchases', async (req, res) => {
+router.get('/purchases', userMiddleware, async (req, res) => {
 
     const { userId } = req;
 

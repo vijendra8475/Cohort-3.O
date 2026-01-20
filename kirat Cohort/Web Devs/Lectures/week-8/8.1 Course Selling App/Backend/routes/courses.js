@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { purchaseModel } = require('../DB/models');
+const { purchaseModel, courseModel } = require('../DB/models');
 const { userMiddleware } = require('../middlewares/user.middlewares');
 const router = Router();
 
@@ -25,10 +25,14 @@ router.post('/purchase', userMiddleware, async (req, res) => {
     }
 })
 
-router.get('/preview', (req, res) => {
+router.get('/preview', async (req, res) => {
+
+    const courses = await courseModel.find();
+
 
     res.json({
-        message : "preview a course"
+        message : "preview a course",
+        courses
     })
 })
 
